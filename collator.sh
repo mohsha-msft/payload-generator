@@ -5,10 +5,22 @@ path="/mnt/f/RandomData/base"
 versions=("10.5.1" "10.7.0")
 sas_validity_in_hrs=24
 
+while getopts s:p: flag
+do
+    case "${flag}" in
+        s) sas_validity_in_hrs=${OPTARG};;
+        p) path=${OPTARG};;
+        *)
+            echo "Invalid flag";
+                  exit 1;
+              ;;
+    esac
+done
+
 for version in "${versions[@]}"
 do
    bash per_azcopy_operation.sh -p "$path" -s "$sas_validity_in_hrs" -v "$version"
-   bash cleanup.sh -v "$version"
+   bash cleanup.sh  -p "$path" -v "$version"
 done
 
 ### Let's perform local source clean up too.

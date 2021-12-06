@@ -1,8 +1,9 @@
 #!/bin/bash
 # Perform cleanup
-while getopts v: flag
+while getopts p:v: flag
 do
     case "${flag}" in
+        p) path=${OPTARG};;
         v) version=${OPTARG};;
         *)
             echo "Invalid flag";
@@ -19,3 +20,8 @@ go run containers_handler.go "delLocB" "$locationB"
 echo "Deleting locationC"
 locationC=$( tail -n 1 locationC$version.csv )
 go run containers_handler.go "delLocC" "$locationC"
+
+echo "Deleting locationD"
+locationD="$path/destination"
+rm -rf $locationD
+
