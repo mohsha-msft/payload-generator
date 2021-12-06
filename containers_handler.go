@@ -121,7 +121,7 @@ func WriteToFile(path string, data [][]string) {
 
 	writer := csv.NewWriter(fileHandler)
 	defer writer.Flush()
-	_ = writer.Write([]string{"Locations"})
+	//_ = writer.Write([]string{"Locations"})
 
 	for i := 0; i < len(data); i++ {
 		_ = writer.Write([]string{data[i][0]})
@@ -146,6 +146,20 @@ func createLocationB(localPath string, hours time.Duration) {
 	WriteToFile("locationB.csv", data)
 }
 
+func deleteContainer(accountType blobAccountType, containerName string) {
+	svcClient, err := getServiceClient(accountType, nil)
+	if err != nil {
+		fmt.Printf("Failed to get serviceClient due to error: %s\n", err.Error())
+	}
+
+	_, err = svcClient.DeleteContainer(context.Background(), containerName, nil)
+	if err != nil {
+		fmt.Printf("Failed to delete the container %s due to error: %s\n", containerName, err.Error())
+	} else {
+		fmt.Printf("Successfully deleted container: %s\n", containerName)
+	}
+}
+
 func createLocationC(containerName string, hours time.Duration) {
 	svcClient1, err := getServiceClient(blobAccountDefault, nil)
 	if err != nil {
@@ -161,6 +175,7 @@ func createLocationC(containerName string, hours time.Duration) {
 	data := make([][]string, 0)
 	containerClient1 := svcClient1.NewContainerClient(containerName)
 	data = append(data, getContainerSAS(containerClient1, time.Now(), time.Now().Add(hours*time.Hour)))
+
 	containerClient2, err := createNewContainer(generateContainerName(), svcClient2)
 	data = append(data, getContainerSAS(containerClient2, time.Now(), time.Now().Add(hours*time.Hour)))
 	WriteToFile("locationC.csv", data)
@@ -204,8 +219,12 @@ func main() {
 		localPath := arguments[3]
 		createLocationD(containerName, time.Duration(sasValidityDuration), localPath)
 	case "delLocB":
+		containerName := getContainerName(arguments[1])
+		deleteContainer(blobAccountDefault, containerName)
 	case "delLocC":
-	case "delLocD":
-		fmt.Println("Not Implemented")
+		containerName := getContainerName(arguments[1])
+		deleteContainer(blobAccountSecondary, containerName)
+	default:
+		fmt.Println("Incorrect argument " + arguments[0])
 	}
 }

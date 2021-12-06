@@ -1,3 +1,6 @@
 .idea/
+azcopybinaries/
 *.xml
 *.csv
+*.zip
+*.exe

@@ -92,7 +92,7 @@ func saveFileNamesToFile(entities *[]fileEntity, saveToPath string) {
 
 	writer := csv.NewWriter(folderHandler)
 	defer writer.Flush()
-	writer.Write([]string{"Name", "Parent", "Size"})
+	//writer.Write([]string{"Name", "Parent", "Size"})
 	for _, entity := range *entities {
 		writer.Write([]string{entity.name, entity.parentPath, entity.sizeIfFile})
 	}
