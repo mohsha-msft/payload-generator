@@ -1,3 +1,3 @@
-module payload-generator
+module performance-testing-framework
 
 go 1.16
