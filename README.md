@@ -3,5 +3,6 @@
 ## Running Collator
 Run with elevated permission if required.
 ```bash
-sh collator.sh
+bash prerequisite.sh
+bash collator.sh
 ```

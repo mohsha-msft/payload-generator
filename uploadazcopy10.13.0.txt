@@ -1,20 +1,0 @@
-INFO: Scanning...
-INFO: Any empty folders will not be processed, because source and/or destination doesn't have full folder support
-
-Job ffde36a3-7c2b-a942-7037-aaa5f2d03c7b has started
-Log file is located at: /root/.azcopy/ffde36a3-7c2b-a942-7037-aaa5f2d03c7b.log
-
-0.0 %, 0 Done, 0 Failed, 100 Pending, 0 Skipped, 100 Total, 0.1 %, 0 Done, 0 Failed, 100 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 27.15931.0 %, 82 Done, 0 Failed, 18 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 146.19057.0 %, 86 Done, 0 Failed, 14 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 105.458513.9 %, 88 Done, 0 Failed, 12 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 83.328518.8 %, 88 Done, 0 Failed, 12 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 77.543622.7 %, 89 Done, 0 Failed, 11 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 76.121323.7 %, 89 Done, 0 Failed, 11 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 54.875328.2 %, 90 Done, 0 Failed, 10 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 54.253829.1 %, 90 Done, 0 Failed, 10 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 42.572437.0 %, 90 Done, 0 Failed, 10 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 34.199440.9 %, 90 Done, 0 Failed, 10 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 30.517556.7 %, 93 Done, 0 Failed, 7 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 28.5639 64.6 %, 93 Done, 0 Failed, 7 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 29.351864.6 %, 93 Done, 0 Failed, 7 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 24.627 72.4 %, 94 Done, 0 Failed, 6 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 15.716676.4 %, 95 Done, 0 Failed, 5 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 9.1715 84.3 %, 97 Done, 0 Failed, 3 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 4.846196.1 %, 97 Done, 0 Failed, 3 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 1.179196.1 %, 99 Done, 0 Failed, 1 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 0.916996.1 %, 99 Done, 0 Failed, 1 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 1.703496.1 %, 99 Done, 0 Failed, 1 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 1.834 96.1 %, 99 Done, 0 Failed, 1 Pending, 0 Skipped, 100 Total, 2-sec Throughput (Mb/s): 1.309796.1 %, 99 Done, 0 Failed, 1 Pending, 0 Skipped, 100 Total,                                
-
-
-Job ffde36a3-7c2b-a942-7037-aaa5f2d03c7b summary
-Elapsed Time (Minutes): 0.8005
-Number of File Transfers: 100
-Number of Folder Property Transfers: 0
-Total Number of Transfers: 100
-Number of Transfers Completed: 100
-Number of Transfers Failed: 0
-Number of Transfers Skipped: 0
-TotalBytesTransferred: 213086208
-Final Job Status: Completed
-

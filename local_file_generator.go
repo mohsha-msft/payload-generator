@@ -10,8 +10,7 @@ import (
 )
 
 const (
-	defaultFolderPath = "folders.csv"
-	defaultFilePath   = "files.csv"
+	defaultFilePath = "files.csv"
 )
 
 // ----------------------- Name Generation Logic -----------------------------------------------------------------------
@@ -63,23 +62,23 @@ type folderEntity struct {
 	path string
 }
 
-func saveFolderNamesToFile(folders *[]folderEntity, saveToPath string) {
-	folderHandler, err := os.Create(saveToPath)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	defer func(folders *os.File) {
-		_ = folders.Close()
-	}(folderHandler)
-
-	writer := csv.NewWriter(folderHandler)
-	defer writer.Flush()
-	writer.Write([]string{"Name"})
-	for _, folder := range *folders {
-		writer.Write([]string{folder.path})
-	}
-	writer.Flush()
-}
+//func saveFolderNamesToFile(folders *[]folderEntity, saveToPath string) {
+//	folderHandler, err := os.Create(saveToPath)
+//	if err != nil {
+//		fmt.Println(err.Error())
+//	}
+//	defer func(folders *os.File) {
+//		_ = folders.Close()
+//	}(folderHandler)
+//
+//	writer := csv.NewWriter(folderHandler)
+//	defer writer.Flush()
+//	writer.Write([]string{"Name"})
+//	for _, folder := range *folders {
+//		writer.Write([]string{folder.path})
+//	}
+//	writer.Flush()
+//}
 
 func saveFileNamesToFile(entities *[]fileEntity, saveToPath string) {
 	folderHandler, err := os.Create(saveToPath)
@@ -94,7 +93,7 @@ func saveFileNamesToFile(entities *[]fileEntity, saveToPath string) {
 	defer writer.Flush()
 	//writer.Write([]string{"Name", "Parent", "Size"})
 	for _, entity := range *entities {
-		writer.Write([]string{entity.name, entity.parentPath, entity.sizeIfFile})
+		_ = writer.Write([]string{entity.name, entity.parentPath, entity.sizeIfFile})
 	}
 	writer.Flush()
 }
@@ -151,6 +150,5 @@ func main() {
 	numFolders = numEntity / 10
 	generationPath := arguments[2]
 	files, _ := generateFilesAndFolders(generationPath, numEntity, numFolders, maxEntityPerLevel)
-	//saveFolderNamesToFile(folders, defaultFolderPath)
 	saveFileNamesToFile(files, defaultFilePath)
 }

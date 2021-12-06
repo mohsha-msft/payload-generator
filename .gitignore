@@ -1,5 +1,5 @@
 .idea/
-azcopybinaries/
+azcopy_binaries/
 *.xml
 *.csv
 *.zip

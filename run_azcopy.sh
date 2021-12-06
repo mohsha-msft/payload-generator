@@ -16,4 +16,6 @@ do
     esac
 done
 
-azcopybinaries/10.13.0/drop/azcopy_linux_amd64 copy "$source" "$destination" "--recursive"
+echo "Using AzCopy Version:"
+azcopy_binaries/$version/drop/azcopy_linux_amd64 --version
+azcopy_binaries/$version/drop/azcopy_linux_amd64 copy "$source" "$destination" "--recursive"

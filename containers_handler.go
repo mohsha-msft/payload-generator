@@ -14,6 +14,12 @@ import (
 )
 
 //-------------------------------------Common Utils --------------------------------------------------------------------
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
 
 // getRequiredEnv gets an environment variable by name and returns an error if it is not found
 func getRequiredEnv(name string) (string, error) {
@@ -25,12 +31,12 @@ func getRequiredEnv(name string) (string, error) {
 	}
 }
 
-const containerNameMaxSize = 32
+const containerNameMaxSize = 15
 
 func generateContainerName() string {
 	var allowedChars = []rune("abcdefghijklmnopqrstuvwxyz")
 	var seededRand = rand.New(rand.NewSource(time.Now().UnixNano()))
-	n := seededRand.Intn(containerNameMaxSize) + 1
+	n := max(3, seededRand.Intn(containerNameMaxSize)+1)
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = allowedChars[seededRand.Intn(len(allowedChars))]
@@ -93,15 +99,20 @@ func createNewContainer(containerName string, serviceClient azblob.ServiceClient
 	return containerClient, err
 }
 
-func getContainerSAS(client azblob.ContainerClient, start time.Time, expiry time.Time) []string {
-	sas, err := client.GetSASToken(azblob.BlobSASPermissions{Read: true, Add: true, Create: true, Write: true, Delete: true}, start, expiry)
+func getContainerSAS(accountType blobAccountType, client azblob.ContainerClient, start time.Time, expiry time.Time) []string {
+	credentials, err := getGenericCredential(accountType)
+	urlParts := azblob.NewBlobURLParts(client.URL())
+	sas, err := azblob.BlobSASSignatureValues{
+		ContainerName: urlParts.ContainerName,
+		Permissions:   azblob.ContainerSASPermissions{Read: true, Add: true, Create: true, Write: true, Delete: true, List: true}.String(),
+		StartTime:     start.UTC(),
+		ExpiryTime:    expiry.UTC(),
+	}.NewSASQueryParameters(credentials)
 	if err != nil {
 		_, _ = client.Delete(context.Background(), nil)
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	urlParts := azblob.NewBlobURLParts(client.URL())
-	//urlToSend := fmt.Sprintf("https://%s.blob.core.windows.net/?%s", urlParts.ContainerName, sas.Encode())
 	urlParts.SAS = sas
 	return []string{urlParts.URL()}
 }
@@ -129,7 +140,7 @@ func WriteToFile(path string, data [][]string) {
 	writer.Flush()
 }
 
-func createLocationB(localPath string, hours time.Duration) {
+func createLocationB(azcopyVersion string, localPath string, hours time.Duration) {
 	svcClient, err := getServiceClient(blobAccountDefault, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -142,8 +153,8 @@ func createLocationB(localPath string, hours time.Duration) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	data = append(data, getContainerSAS(containerClient, time.Now(), time.Now().Add(hours*time.Hour)))
-	WriteToFile("locationB.csv", data)
+	data = append(data, getContainerSAS(blobAccountDefault, containerClient, time.Now(), time.Now().Add(hours*time.Hour)))
+	WriteToFile("locationB"+azcopyVersion+".csv", data)
 }
 
 func deleteContainer(accountType blobAccountType, containerName string) {
@@ -160,7 +171,7 @@ func deleteContainer(accountType blobAccountType, containerName string) {
 	}
 }
 
-func createLocationC(containerName string, hours time.Duration) {
+func createLocationC(azcopyVersion string, containerName string, hours time.Duration) {
 	svcClient1, err := getServiceClient(blobAccountDefault, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -174,14 +185,14 @@ func createLocationC(containerName string, hours time.Duration) {
 	}
 	data := make([][]string, 0)
 	containerClient1 := svcClient1.NewContainerClient(containerName)
-	data = append(data, getContainerSAS(containerClient1, time.Now(), time.Now().Add(hours*time.Hour)))
+	data = append(data, getContainerSAS(blobAccountDefault, containerClient1, time.Now(), time.Now().Add(hours*time.Hour)))
 
 	containerClient2, err := createNewContainer(generateContainerName(), svcClient2)
-	data = append(data, getContainerSAS(containerClient2, time.Now(), time.Now().Add(hours*time.Hour)))
-	WriteToFile("locationC.csv", data)
+	data = append(data, getContainerSAS(blobAccountSecondary, containerClient2, time.Now(), time.Now().Add(hours*time.Hour)))
+	WriteToFile("locationC"+azcopyVersion+".csv", data)
 }
 
-func createLocationD(containerName string, hours time.Duration, localPath string) {
+func createLocationD(azcopyVersion string, containerName string, hours time.Duration, localPath string) {
 	svcClient, err := getServiceClient(blobAccountDefault, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -189,9 +200,9 @@ func createLocationD(containerName string, hours time.Duration, localPath string
 	}
 	data := make([][]string, 0)
 	containerClient1 := svcClient.NewContainerClient(containerName)
-	data = append(data, getContainerSAS(containerClient1, time.Now(), time.Now().Add(hours*time.Hour)))
+	data = append(data, getContainerSAS(blobAccountSecondary, containerClient1, time.Now(), time.Now().Add(hours*time.Hour)))
 	data = append(data, []string{localPath})
-	WriteToFile("locationD.csv", data)
+	WriteToFile("locationD"+azcopyVersion+".csv", data)
 }
 
 func getContainerName(containerURL string) string {
@@ -208,16 +219,19 @@ func main() {
 	case "locB":
 		localPath := arguments[1]
 		sasValidityDuration, _ := strconv.Atoi(arguments[2])
-		createLocationB(localPath, time.Duration(sasValidityDuration))
+		azcopyVersion := arguments[3]
+		createLocationB(azcopyVersion, localPath, time.Duration(sasValidityDuration))
 	case "locC":
 		containerName := getContainerName(arguments[1])
 		sasValidityDuration, _ := strconv.Atoi(arguments[2])
-		createLocationC(containerName, time.Duration(sasValidityDuration))
+		azcopyVersion := arguments[3]
+		createLocationC(azcopyVersion, containerName, time.Duration(sasValidityDuration))
 	case "locD":
 		containerName := getContainerName(arguments[1])
 		sasValidityDuration, _ := strconv.Atoi(arguments[2])
 		localPath := arguments[3]
-		createLocationD(containerName, time.Duration(sasValidityDuration), localPath)
+		azcopyVersion := arguments[4]
+		createLocationD(azcopyVersion, containerName, time.Duration(sasValidityDuration), localPath)
 	case "delLocB":
 		containerName := getContainerName(arguments[1])
 		deleteContainer(blobAccountDefault, containerName)
