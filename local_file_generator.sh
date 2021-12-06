@@ -1,8 +1,24 @@
 #!/bin/bash
 # shellcheck disable=SC2162
 # Creates files.csv which contains file name, directory name, and size of the file
-go run file_generator.go 1000 10 "/mnt/f/RandomData/base/"
 
+number_of_files=100
+number_of_entities_per_level=10
+path="/mnt/f/RandomData/base/source"
+
+while getopts n:e:p: flag
+do
+    case "${flag}" in
+        n) number_of_files=${OPTARG};;
+        e) number_of_entities_per_level=${OPTARG};;
+        p) path=${OPTARG};;
+        *) echo "Invalid flag";
+           exit 1;
+           ;;
+    esac
+done
+
+go run local_file_generator.go "$number_of_files" "$number_of_entities_per_level" "$path"
 
 # Read the CSV file and construct the load
 while IFS="," read -r Name Parent Size

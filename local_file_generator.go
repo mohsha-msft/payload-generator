@@ -18,35 +18,35 @@ const (
 
 const fileNameMaxSize = 64
 
-var allowedChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-var fileExtensions = []string{"", ".sh", ".exe", ".cpp", ".java", ".py", ".go", ".mp3", ".mp4", ".pkg", ".jpeg", ".png",
+var fileGeneratorAllowedCharacters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+var fileGeneratorFileExtensions = []string{"", ".sh", ".exe", ".cpp", ".java", ".py", ".go", ".mp3", ".mp4", ".pkg", ".jpeg", ".png",
 	".pdf", ".gzip", ".txt", ".dat", ".bat", ".xlsx", ".vhd", ".tar.gz", ".deb"}
-var fileSizes = []string{"1K", "10K", "100K", "1M", "10M", "100M", "1G", "10G"}
-var cmmProbability = []int{400, 700, 800, 900, 1000, 1010, 1011, 1011}
-var seededRand = rand.New(rand.NewSource(time.Now().UnixNano()))
+var fileGeneratorFileSizes = []string{"1K", "10K", "100K", "1M", "10M", "100M", "1G", "10G"}
+var fileGeneratorCumulativeProbability = []int{400, 700, 800, 900, 1000, 1010, 1011, 1011}
+var fileGeneratorSeededRandom = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func randSeq(n int) string {
 	b := make([]rune, n)
 	for i := range b {
 		if i == 0 {
-			b[i] = allowedChars[seededRand.Intn(len(allowedChars)-10)]
+			b[i] = fileGeneratorAllowedCharacters[fileGeneratorSeededRandom.Intn(len(fileGeneratorAllowedCharacters)-10)]
 		} else {
-			b[i] = allowedChars[seededRand.Intn(len(allowedChars))]
+			b[i] = fileGeneratorAllowedCharacters[fileGeneratorSeededRandom.Intn(len(fileGeneratorAllowedCharacters))]
 		}
 	}
 	return string(b)
 }
 
 func fileNameAndSize() (string, string) {
-	fileSizeIndex := rand.Intn(cmmProbability[len(cmmProbability)-1])
+	fileSizeIndex := rand.Intn(fileGeneratorCumulativeProbability[len(fileGeneratorCumulativeProbability)-1])
 	fileSize := "1K"
-	for i := 0; i < len(cmmProbability); i++ {
-		if fileSizeIndex <= cmmProbability[i] {
-			fileSize = fileSizes[i]
+	for i := 0; i < len(fileGeneratorCumulativeProbability); i++ {
+		if fileSizeIndex <= fileGeneratorCumulativeProbability[i] {
+			fileSize = fileGeneratorFileSizes[i]
 			break
 		}
 	}
-	return randSeq(rand.Intn(fileNameMaxSize)+1) + fileExtensions[rand.Intn(len(fileExtensions))], fileSize
+	return randSeq(rand.Intn(fileNameMaxSize)+1) + fileGeneratorFileExtensions[rand.Intn(len(fileGeneratorFileExtensions))], fileSize
 }
 
 func folderName() string {
