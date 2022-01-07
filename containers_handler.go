@@ -117,6 +117,20 @@ func getContainerSAS(accountType blobAccountType, client azblob.ContainerClient,
 	return []string{urlParts.URL()}
 }
 
+func deleteContainer(accountType blobAccountType, containerName string) {
+	svcClient, err := getServiceClient(accountType, nil)
+	if err != nil {
+		fmt.Printf("Failed to get serviceClient due to error: %s\n", err.Error())
+	}
+
+	_, err = svcClient.DeleteContainer(context.Background(), containerName, nil)
+	if err != nil {
+		fmt.Printf("Failed to delete the container %s due to error: %s\n", containerName, err.Error())
+	} else {
+		fmt.Printf("Successfully deleted container: %s\n", containerName)
+	}
+}
+
 func WriteToFile(path string, data [][]string) {
 	if len(data) == 0 {
 		fmt.Println("Empty data!")
@@ -155,20 +169,6 @@ func createLocationB(azcopyVersion string, localPath string, hours time.Duration
 	}
 	data = append(data, getContainerSAS(blobAccountDefault, containerClient, time.Now(), time.Now().Add(hours*time.Hour)))
 	WriteToFile("locationB"+azcopyVersion+".csv", data)
-}
-
-func deleteContainer(accountType blobAccountType, containerName string) {
-	svcClient, err := getServiceClient(accountType, nil)
-	if err != nil {
-		fmt.Printf("Failed to get serviceClient due to error: %s\n", err.Error())
-	}
-
-	_, err = svcClient.DeleteContainer(context.Background(), containerName, nil)
-	if err != nil {
-		fmt.Printf("Failed to delete the container %s due to error: %s\n", containerName, err.Error())
-	} else {
-		fmt.Printf("Successfully deleted container: %s\n", containerName)
-	}
 }
 
 func createLocationC(azcopyVersion string, containerName string, hours time.Duration) {

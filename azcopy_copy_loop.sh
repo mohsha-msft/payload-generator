@@ -28,7 +28,7 @@ locationB=$( tail -n 1 locationB$version.csv )
 echo "Created $locationB"
 
 echo "Starting upload between $locationA and $locationB using AzCopy $version"
-bash run_azcopy.sh -v "$version" -s "$locationA" -d "$locationB" > performance_upload_copy_$taskId.txt
+bash run_azcopy.sh -v "$version" -s "$locationA" -d "$locationB" > results/performance_upload_copy_$taskId.txt
 
 echo "Run S2S Test ===================================================================================================="
 go run containers_handler.go "locC" "$locationB" "$sas_validity_in_hrs" "$version"
@@ -36,7 +36,7 @@ locationC=$( tail -n 1 locationC$version.csv )
 echo "Created $locationC"
 
 echo "Starting S2S transfer between $locationB and $locationC using AzCopy $version"
-bash run_azcopy.sh -v "$version" -s "$locationB" -d "$locationC" > performance_s2s_copy_$taskId.txt
+bash run_azcopy.sh -v "$version" -s "$locationB" -d "$locationC" > results/performance_s2s_copy_$taskId.txt
 
 echo "Run Download Test ==============================================================================================="
 locationD="$path/destination/"
@@ -44,4 +44,4 @@ mkdir -p "$locationD"
 echo "Created $locationD"
 
 echo "Starting download between $locationC and $locationD using AzCopy $version"
-bash run_azcopy.sh -v "$version" -s "$locationC" -d "$locationD" > performance_download_copy_$taskId.txt
+bash run_azcopy.sh -v "$version" -s "$locationC" -d "$locationD" > results/performance_download_copy_$taskId.txt
