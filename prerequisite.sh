@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Download AzCopy Binaries
-bash download_azcopy_binaries.sh
+#bash download_azcopy_binaries.sh
 
 # Create Local Source
 number_of_files=100

@@ -31,6 +31,6 @@ rm -rf $locationD
 
 ## Deleting AzCopy Binaries
 #rm -rf azcopy_binaries
-#
-## Deleting all the CSV files created during the process
-#rm *.csv
+
+# Deleting all the CSV files created during the process
+rm location*.csv

@@ -3,7 +3,7 @@ set -e
 path="/mnt/f/RandomData/base"
 sas_validity_in_hrs=24
 version="10.13.0"
-operation="copy"
+operation="sync"
 # shellcheck disable=SC2006
 
 while getopts p:s:v: flag
@@ -24,25 +24,16 @@ locationA="$path/source/"
 echo "Created $locationA"
 
 echo "Run Upload Test ================================================================================================="
-go run containers_handler.go "locB" "$locationA" "$sas_validity_in_hrs" "$version"
 locationB=$( tail -n 1 locationB$version.csv )
-echo "Created $locationB"
-
-echo "Starting upload between $locationA and $locationB using AzCopy $version"
-bash run_azcopy.sh -o "$operation" -v "$version" -s "$locationA" -d "$locationB" > results/performance_upload_copy_$taskId.txt
+echo "Starting $operation upload between $locationA and $locationB using AzCopy $version"
+bash run_azcopy.sh -o "$operation" -v "$version" -s "$locationA" -d "$locationB" > results/performance_upload_$operation_$taskId.txt
 
 echo "Run S2S Test ===================================================================================================="
-go run containers_handler.go "locC" "$locationB" "$sas_validity_in_hrs" "$version"
 locationC=$( tail -n 1 locationC$version.csv )
-echo "Created $locationC"
-
-echo "Starting S2S transfer between $locationB and $locationC using AzCopy $version"
-bash run_azcopy.sh -o "$operation" -v "$version" -s "$locationB" -d "$locationC" > results/performance_s2s_copy_$taskId.txt
+echo "Starting $operation S2S transfer between $locationB and $locationC using AzCopy $version"
+bash run_azcopy.sh -o "$operation" -v "$version" -s "$locationB" -d "$locationC" > results/performance_s2s_$operation_$taskId.txt
 
 echo "Run Download Test ==============================================================================================="
 locationD="$path/destination/"
-mkdir -p "$locationD"
-echo "Created $locationD"
-
-echo "Starting download between $locationC and $locationD using AzCopy $version"
-bash run_azcopy.sh -o "$operation" -v "$version" -s "$locationC" -d "$locationD" > results/performance_download_copy_$taskId.txt
+echo "Starting $operation download between $locationC and $locationD using AzCopy $version"
+bash run_azcopy.sh -o "$operation" -v "$version" -s "$locationC" -d "$locationD" > results/performance_download_$operation_$taskId.txt
