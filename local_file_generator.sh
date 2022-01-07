@@ -4,7 +4,7 @@
 
 number_of_files=100
 number_of_entities_per_level=10
-path="/mnt/f/RandomData/base/source"
+path="/mnt/f/RandomData/base"
 
 while getopts n:e:p: flag
 do
@@ -19,6 +19,8 @@ do
 done
 
 go run local_file_generator.go "$number_of_files" "$number_of_entities_per_level" "$path"
+
+# Run chmod a+x on the source path
 
 # Read the CSV file and construct the load
 while IFS="," read -r Name Parent Size
@@ -39,4 +41,4 @@ do
       dd if=/dev/urandom of="$FileName" bs="64M" count=160 iflag=fullblock
       ;;
   esac
-done < files.csv
+done < listOfSourceFiles.csv

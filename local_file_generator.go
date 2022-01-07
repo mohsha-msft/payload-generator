@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	defaultFilePath = "files.csv"
+	defaultFilePath = "listOfSourceFiles.csv"
 )
 
 // ----------------------- Name Generation Logic -----------------------------------------------------------------------
