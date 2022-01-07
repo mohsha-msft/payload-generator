@@ -210,6 +210,20 @@ func getContainerName(containerURL string) string {
 	return urlParts.ContainerName
 }
 
+func publishResults(localPath, containerName string, hours time.Duration) {
+	svcClient1, err := getServiceClient(blobAccountDefault, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	data := make([][]string, 0)
+	data = append(data, []string{localPath + "/*.csv"})
+
+	containerClient1 := svcClient1.NewContainerClient(containerName)
+	data = append(data, getContainerSAS(blobAccountDefault, containerClient1, time.Now(), time.Now().Add(hours*time.Hour)))
+	WriteToFile("publishResultsLocation.csv", data)
+}
+
 func main() {
 	// A (Local) --- upload ---> B (Container1) ---- S2S ---> C (container2) --- Download ---> D (Local)
 	// Create A by running local_file_generator.sh
@@ -238,6 +252,11 @@ func main() {
 	case "delLocC":
 		containerName := getContainerName(arguments[1])
 		deleteContainer(blobAccountSecondary, containerName)
+	case "pubRes":
+		localPath := arguments[1]
+		containerName := arguments[2]
+		sasValidityDuration, _ := strconv.Atoi(arguments[3])
+		publishResults(localPath, containerName, time.Duration(sasValidityDuration))
 	default:
 		fmt.Println("Incorrect argument " + arguments[0])
 	}

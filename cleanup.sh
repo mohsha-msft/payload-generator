@@ -13,6 +13,10 @@ do
 done
 
 echo "Stating Cleanup ================================================================================================="
+#echo "Deleting locationA"
+#locationA="$path/source"
+#rm -rf $locationA
+
 echo "Deleting locationB"
 locationB=$( tail -n 1 locationB$version.csv )
 go run containers_handler.go "delLocB" "$locationB"
@@ -25,3 +29,8 @@ echo "Deleting locationD"
 locationD="$path/destination"
 rm -rf $locationD
 
+## Deleting AzCopy Binaries
+#rm -rf azcopy_binaries
+#
+## Deleting all the CSV files created during the process
+#rm *.csv

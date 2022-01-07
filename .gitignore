@@ -4,3 +4,4 @@ azcopy_binaries/
 *.csv
 *.zip
 *.exe
+*.txt

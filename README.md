@@ -30,7 +30,7 @@ Collator has an array of AzCopy version `versions=("10.5.1" "10.7.0")` which is 
 For every version in the `versions` array, collator performs following operations :
 
 ```bash
-bash per_azcopy_operation.sh -p "$path" -s "$sas_validity_in_hrs" -v "$version"
+bash azcopy_copy_loop.sh -p "$path" -s "$sas_validity_in_hrs" -v "$version"
 bash cleanup.sh -v "$version"
 ```
 
