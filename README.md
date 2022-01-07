@@ -22,7 +22,7 @@ Then, the script starts creating the location `A (source, local)` which will be 
 
 ### Step 2: Running Collator
 ```bash
-bash collator.sh -p "$path_location_A" -s "$sas_validity_in_hrs"
+bash collator.sh -p "$path_location_A" -s "$sas_validity_in_hrs" -o "copy/sync"
 ```
 The framework uses SAS as a form of authentication. The SAS validity can be set by user depending upon the size of transfer.
 

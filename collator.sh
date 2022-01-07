@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # A (Local) --- upload ---> B (Container1) ---- S2S ---> C (container2) --- Download ---> D (Local)
 #versions=("10.4.3" "10.5.1" "10.7.0" "10.8.0" "10.12.0" "10.13.0")
 path="/mnt/f/RandomData/base"

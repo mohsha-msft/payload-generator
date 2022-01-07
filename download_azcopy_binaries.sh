@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # shellcheck disable=SC2034
 sudo apt-get install unzip
 #versions=("10.4.3" "10.5.1" "10.7.0" "10.8.0" "10.12.0" "10.13.0")

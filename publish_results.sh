@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 container_name="publishresults"
 path="/mnt/f/RandomData/base"
 sas_validity_in_hrs=24

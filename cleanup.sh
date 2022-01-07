@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Perform cleanup
 while getopts p:v: flag
 do
@@ -12,7 +13,7 @@ do
     esac
 done
 
-echo "Stating Cleanup ================================================================================================="
+echo "Starting Cleanup ================================================================================================="
 #echo "Deleting locationA"
 #locationA="$path/source"
 #rm -rf $locationA

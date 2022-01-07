@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # shellcheck disable=SC2162
 # Creates files.csv which contains file name, directory name, and size of the file
 
